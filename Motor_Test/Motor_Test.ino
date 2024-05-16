@@ -28,39 +28,65 @@ void setup() {
 
 void loop() {
   // Move the DC motor forward at maximum speed
-  Serial.println("Moving Forward");
-  digitalWrite(motor1Pin1, HIGH);
-  digitalWrite(motor1Pin2, LOW); 
+  go_forward(255);
   delay(2000);
 
   // Stop the DC motor
-  Serial.println("Motor stopped");
-  digitalWrite(motor1Pin1, LOW);
-  digitalWrite(motor1Pin2, LOW);
+  slow_brake();
   delay(1000);
 
   // Move DC motor backwards at maximum speed
-  Serial.println("Moving Backwards");
-  digitalWrite(motor1Pin1, LOW);
-  digitalWrite(motor1Pin2, HIGH); 
+  go_backward(255);
   delay(2000);
 
   // Stop the DC motor
-  Serial.println("Motor stopped");
-  digitalWrite(motor1Pin1, LOW);
-  digitalWrite(motor1Pin2, LOW);
+  slow_brake();
   delay(1000);
 
   // Move DC motor forward with increasing speed
-  digitalWrite(motor1Pin1, HIGH);
-  digitalWrite(motor1Pin2, LOW);
   while (dutyCycle <= 255){
-    ledcWrite(pwmChannel, dutyCycle);   
+    go_forward(dutyCycle);  
     Serial.print("Forward with duty cycle: ");
     Serial.println(dutyCycle);
     dutyCycle = dutyCycle + 5;
-    delay(500);
+    delay(100);
   }
 
-   dutyCycle = 200;
+   dutyCycle = 0;
+}
+
+void go_forward(int speed){
+  ledcWrite(pwmChannel, speed); 
+  Serial.print("Moving Forward ");
+  Serial.println(dutyCycle);
+  digitalWrite(motor1Pin1, HIGH);
+  digitalWrite(motor1Pin2, LOW); 
+}
+
+void go_backward(int speed){
+  ledcWrite(pwmChannel, speed); 
+  Serial.print("Moving Backward ");
+  Serial.println(dutyCycle);
+  digitalWrite(motor1Pin1, LOW);
+  digitalWrite(motor1Pin2, HIGH); 
+}
+
+void turn_right(int speed){
+  // Your Code for turn Right
+}
+
+void turn_left(int speed){
+  // Your Code for turn Left
+}
+
+void slow_brake(){
+  Serial.println("Slow Brake");
+  digitalWrite(motor1Pin1, LOW);
+  digitalWrite(motor1Pin2, LOW); 
+}
+
+void quick_brake(){
+  Serial.println("Quick Brake");
+  digitalWrite(motor1Pin1, HIGH);
+  digitalWrite(motor1Pin2, HIGH); 
 }
