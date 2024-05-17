@@ -76,7 +76,7 @@ void go_forward(int LSpeed,int RSpeed){
   }
   else{
     ledcWrite(pwmChannel0, 0); 
-  ledcWrite(pwmChannel1, LSpeed);
+  ledcWrite(pwmChannel1, -LSpeed);
   }
 
   if(RSpeed > 0){
@@ -85,7 +85,7 @@ void go_forward(int LSpeed,int RSpeed){
   }
   else{
     ledcWrite(pwmChannel2, 0); 
-    ledcWrite(pwmChannel3, RSpeed);
+    ledcWrite(pwmChannel3, -RSpeed);
   }
 
 
