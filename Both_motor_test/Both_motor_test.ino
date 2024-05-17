@@ -1,15 +1,15 @@
-int motor1Pin1 = 27; 
-int motor1Pin2 = 26; 
-int enable1Pin = 14; 
+int motor1Pin1 = 32; 
+int motor1Pin2 = 33; 
 
-int motor2Pin1 = 25;
-int motor2Pin2 = 34;
-int enable2Pin = 12;
+int motor2Pin1 = 27; 
+int motor2Pin2 = 26; 
 
 // Setting PWM properties
 const int freq = 30000;
-const int pwmChannel1 = 0;
-const int pwmChannel2 = 1;
+const int pwmChannel0 = 0;
+const int pwmChannel1 = 1;
+const int pwmChannel2 = 2;
+const int pwmChannel3 = 3;
 const int resolution = 8;
 int dutyCycle = 200;
 
@@ -17,15 +17,20 @@ void setup() {
   // sets the pins as outputs:
   pinMode(motor1Pin1, OUTPUT);
   pinMode(motor1Pin2, OUTPUT);
-  pinMode(enable1Pin, OUTPUT);
+  pinMode(motor2Pin1, OUTPUT);
+  pinMode(motor2Pin2, OUTPUT);
   
   // configure PWM functionalitites
+  ledcSetup(pwmChannel0, freq, resolution);
   ledcSetup(pwmChannel1, freq, resolution);
   ledcSetup(pwmChannel2, freq, resolution);
+  ledcSetup(pwmChannel3, freq, resolution);
   
   // attach the channel to the GPIO to be controlled
-  ledcAttachPin(enable1Pin, pwmChannel1);
-  ledcAttachPin(enable2Pin, pwmChannel2);
+  ledcAttachPin(motor1Pin1, pwmChannel0);
+  ledcAttachPin(motor1Pin2, pwmChannel1);
+  ledcAttachPin(motor2Pin1, pwmChannel2);
+  ledcAttachPin(motor2Pin2, pwmChannel3);
 
   Serial.begin(115200);
 
@@ -62,43 +67,29 @@ void loop() {
    dutyCycle = 0;
 }
 
-void go_forward(int Lspeed , int Rspeed){
+void go_forward(int LSpeed,int RSpeed){
 
-  if(Lspeed > 0){
-  ledcWrite(pwmChannel1, Lspeed); 
-  
-  Serial.print("Moving Left Motor Forward ");
-  digitalWrite(motor1Pin1, HIGH);
-  digitalWrite(motor1Pin2, LOW); 
+  if(LSpeed > 0){
+  ledcWrite(pwmChannel0, LSpeed); 
+  ledcWrite(pwmChannel1, 0);
   
   }
   else{
-    ledcWrite(pwmChannel1, -Lspeed); 
-
-    Serial.print("Moving Left Motor Backward ");
-    digitalWrite(motor1Pin1, LOW);
-    digitalWrite(motor1Pin2, HIGH); 
+    ledcWrite(pwmChannel0, 0); 
+  ledcWrite(pwmChannel1, LSpeed);
   }
 
-
-  if(Rspeed > 0){
-    ledcWrite(pwmChannel2, Rspeed);
-
-    Serial.print("Moving Right Motor Forward ");
-    digitalWrite(motor2Pin1, HIGH);
-    digitalWrite(motor2Pin2, LOW); 
+  if(RSpeed > 0){
+    ledcWrite(pwmChannel2, RSpeed); 
+    ledcWrite(pwmChannel3, 0);
   }
   else{
-    ledcWrite(pwmChannel2, -Rspeed);
-
-    Serial.print("Moving Right Motor Backward ");
-    digitalWrite(motor2Pin1, LOW);
-    digitalWrite(motor2Pin2, HIGH); 
+    ledcWrite(pwmChannel2, 0); 
+    ledcWrite(pwmChannel3, RSpeed);
   }
 
 
 }
-
 
 void turn_right(int speed){
   // Your Code for turn Right
@@ -110,12 +101,6 @@ void turn_left(int speed){
 
 void slow_brake(){
   Serial.println("Slow Brake");
-  digitalWrite(motor1Pin1, LOW);
-  digitalWrite(motor1Pin2, LOW); 
-}
-
-void quick_brake(){
-  Serial.println("Quick Brake");
-  digitalWrite(motor1Pin1, HIGH);
-  digitalWrite(motor1Pin2, HIGH); 
+  ledcWrite(pwmChannel0, 0); 
+  ledcWrite(pwmChannel1, 0); 
 }
