@@ -102,5 +102,7 @@ void turn_left(int speed){
 void slow_brake(){
   Serial.println("Slow Brake");
   ledcWrite(pwmChannel0, 0); 
-  ledcWrite(pwmChannel1, 0); 
+  ledcWrite(pwmChannel1, 0);
+  ledcWrite(pwmChannel2, 0); 
+  ledcWrite(pwmChannel3, 0); 
 }
