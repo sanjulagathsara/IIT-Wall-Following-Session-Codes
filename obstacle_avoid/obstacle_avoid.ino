@@ -93,7 +93,7 @@ void turn_left(int speed){
   ledcWrite(pwmChannel1, speed);
   ledcWrite(pwmChannel2, speed); 
   ledcWrite(pwmChannel3, 0); 
-  delay(1000);
+  delay(300);
 }
 
 void loop() {
